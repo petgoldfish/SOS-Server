@@ -14,6 +14,7 @@ public class AmbulanceDetails extends AppCompatActivity {
 
     TextView textView1;
     TextView textView2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +22,7 @@ public class AmbulanceDetails extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        textView1 =(TextView) findViewById(R.id.textView1);
+        textView1 = (TextView) findViewById(R.id.textView1);
         textView2 = (TextView) findViewById(R.id.textView2);
         textView1.setText(getIntent().getExtras().getString("Latitude"));
         textView2.setText(getIntent().getExtras().getString("Longitude"));
@@ -32,5 +33,13 @@ public class AmbulanceDetails extends AppCompatActivity {
     public void maps(View view) {
 
         GPSTracker gps = new GPSTracker(getApplicationContext());
-        String uri
+        String uriBegin = "geo:" + gps.getLatitude() + "" + gps.getLongitude();
+        String query = gps.getLatitude() + "," + gps.getLongitude() + "(" + "Emergency)";
+        String encodedQuery = Uri.encode(query);
+        String uriString = uriBegin + "?q=" + encodedQuery;
+        Uri uri = Uri.parse(uriString);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        intent.setPackage("com.google.android.app.maps");
+        startActivity(intent);
+    }
 }
